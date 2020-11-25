@@ -1,0 +1,36 @@
+ARG BASE_IMAGE=ubuntu:latest
+FROM $BASE_IMAGE
+
+ARG ZULU_VERSION
+ARG JAVA_FLAVOR
+ARG JAVA_VERSION
+ARG JAVA_VERSION_ESUM
+
+ENV BINARY_URL="https://cdn.azul.com/zulu/bin/zulu${ZULU_VERSION}-ca-${JAVA_FLAVOR}${JAVA_VERSION}-linux_x64.tar.gz"
+ENV JAVA_HOME=/opt/java/openjdk
+
+COPY ./docker-entrypoint.sh /
+COPY ./docker-entrypoint.d/* /docker-entrypoint.d/
+
+RUN env && \
+    apt-get update && apt-get install --no-install-recommends curl ca-certificates -y && \
+    echo ">>> Downloading OpenJDK installation package (tar.gz)..." && \
+    curl -LfSo /tmp/openjdk.tar.gz ${BINARY_URL} && \
+    echo ">>> Verifying OpenJDK installation package checksum (sha256)..." && \
+    echo "${JAVA_VERSION_ESUM} */tmp/openjdk.tar.gz" | sha256sum -c - && \
+    echo ">>> Creating OpenJDK installation directory..." && \
+    mkdir -p /opt/java/openjdk && cd /opt/java/openjdk && pwd && \
+    echo ">>> Extracting OpenJDK installation package..." && \
+    tar -xf /tmp/openjdk.tar.gz --strip-components=1 && \
+    echo ">>> Removing OpenJDK installation package..." && \
+    rm -rf /tmp/openjdk.tar.gz && \
+    echo ">>> Upgrade system packages..." && \
+    apt-get update && apt-get upgrade -y && \
+    echo ">>> Clean up..." && \
+    apt-get autoremove --purge -y && apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+ENV PATH ${PATH}:${JAVA_HOME}/bin
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["java", "$JAVA_OPTS", "-version"]

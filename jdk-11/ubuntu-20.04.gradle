@@ -1,0 +1,18 @@
+ext {
+    zulu = [
+            vendor : 'azul',
+            version: ZULU[11]
+    ]
+    java = [
+            vendor : 'azul',
+            flavor : 'jdk',
+            version: ZULUOPENJDK[11]
+    ]
+    os = [
+            vendor : 'ubuntu',
+            version: '20.04',
+            name   : 'focal'
+    ]
+    extraTags = [
+    ]
+}
