@@ -2,12 +2,38 @@ import com.avast.gradle.dockercompose.ContainerInfo
 import com.avast.gradle.dockercompose.tasks.ComposeDown
 import com.avast.gradle.dockercompose.tasks.ComposeUp
 import com.bmuschko.gradle.docker.tasks.container.DockerWaitContainer
-
+import java.text.SimpleDateFormat
 import java.util.concurrent.Callable
 
 plugins {
     id "eu.xenit.docker" version "5.1.1" apply false
     id "eu.xenit.docker-compose" version "5.1.1" apply false
+}
+
+static String getBranchName(Project project) {
+    return project.hasProperty('branchName') ? project.branchName : (System.getenv('BRANCH_NAME') ?: 'local')
+}
+
+static String getVersionQualifier(String branchName) {
+    if (branchName.endsWith('release')) {
+        return ''
+    }
+
+    if (branchName.endsWith('main')) {
+        return '-SNAPSHOT'
+    }
+
+    return '-' + branchName.split('/').last() + '-SNAPSHOT'
+}
+
+static String getBuildTime(String branchName) {
+    def dateFormatPattern = "-yyyyMMdd"
+    if (!branchName.endsWith('release')) {
+        dateFormatPattern += ".HHmm"
+    }
+    def df = new SimpleDateFormat(dateFormatPattern)
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(new Date())
 }
 
 static List<String> calcTags(Project project) {
@@ -30,12 +56,22 @@ static List<String> calcTags(Project project) {
             .collect { it.join('-') }
 
     // add another tag that omits distro-information if
-    // it's our default OS release (currently Ubuntu 16.04)
+    // it's our default OS release (currently Debian 10)
     if (isDefaultOsRelease(os)) {
         tags += javaTags
     }
 
-    return extraTags + tags
+    def allTags = extraTags + tags
+
+    def branchName = getBranchName(project)
+    def versionQualifier = getVersionQualifier(branchName)
+    def buildTime = getBuildTime(branchName)
+    def timestampedTagsWithVersionQualifier = allTags.collect { it + "${versionQualifier}${buildTime}" }
+
+    if (!branchName.endsWith('release') && !branchName.equals('local')) {
+        return timestampedTagsWithVersionQualifier
+    }
+    return allTags + timestampedTagsWithVersionQualifier
 }
 
 ext {
@@ -269,10 +305,13 @@ task verifyImageTags(group: 'verification') {
         // Check that a few common/expected tags are actually published
         println allTags.keySet().sort()
 
-        def expectedTags = ['jdk-11']
-        expectedTags.each {
-            if (!allTags.containsKey(it)) {
-                throw new GradleException("Tag '$it' is expected, but not defined in any project")
+        def branchName = getBranchName(project)
+        if (branchName.endsWith("release")) {
+            def expectedTags = ['jdk-11']
+            expectedTags.each {
+                if (!allTags.containsKey(it)) {
+                    throw new GradleException("Tag '$it' is expected, but not defined in any project")
+                }
             }
         }
     }
