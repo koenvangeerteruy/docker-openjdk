@@ -25,7 +25,7 @@ RUN env && \
     echo ">>> Removing OpenJDK installation package..." && \
     rm -rf /tmp/openjdk.tar.gz && \
     echo ">>> Upgrade system packages..." && \
-    apt-get update && apt-get upgrade -y && \
+    apt-get update && apt-get --simulate --verbose-versions upgrade && apt-get upgrade -y && \
     echo ">>> Clean up..." && \
     apt-get autoremove --purge -y && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
