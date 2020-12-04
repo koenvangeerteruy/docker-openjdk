@@ -305,10 +305,13 @@ task verifyImageTags(group: 'verification') {
         // Check that a few common/expected tags are actually published
         println allTags.keySet().sort()
 
-        def expectedTags = ['jdk-11']
-        expectedTags.each {
-            if (!allTags.containsKey(it)) {
-                throw new GradleException("Tag '$it' is expected, but not defined in any project")
+        def branchName = getBranchName(project)
+        if (branchName.endsWith("release")) {
+            def expectedTags = ['jdk-11']
+            expectedTags.each {
+                if (!allTags.containsKey(it)) {
+                    throw new GradleException("Tag '$it' is expected, but not defined in any project")
+                }
             }
         }
     }
