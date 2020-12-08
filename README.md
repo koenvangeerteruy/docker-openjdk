@@ -6,14 +6,14 @@ Java docker images using [Azul's Zulu OpenJDK](https://www.azul.com/downloads/zu
 * `jdk-11-ubuntu`, `jdk-11-ubuntu-20.04`, `jdk-11-focal`, `jdk-11u9.1-ubuntu`, `jdk-11u9.1-ubuntu-20.04`,  `jdk-11u9.1-focal`
 
 Timestamped tags are also provided:
-* tags containing a `-SNAPSHOT-yyyymmdd.hhmm` postfix are developemt artifacts (from the main branch). Do not use them in a production environment.
+* tags containing a `-SNAPSHOT` or `-SNAPSHOT-yyyymmdd.hhmm` postfix are development artifacts (from the main branch). Do not use them in a production environment.
 * tags containing a `-yyyymmdd` postfix are release artifacts
 
-**NOTE**: the `-SNAPSHOT` and timestamped tags are **NOT** maintained.
+**NOTE**: Timestamped tags are **NOT** maintained.
 
 ## Environment variables
 There are several environment variables available to tweak the behaviour. While none of the variables are required, they may significantly aid you in using these images.
-The variables are read by an init script which further appends to JAVA_OPTS.
+The variables are read by an init script which further appends them to JAVA_OPTS.
 
 Environment variables:
 
@@ -23,8 +23,8 @@ Environment variables:
 | JAVA_XMX                         |           | -Xms          |
 | DEBUG                            | false     | -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n |
 | JMX_ENABLED                      | false     | -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.rmi.port=5000 -Dcom.sun.management.jmxremote.port=5000 -Djava.rmi.server.hostname=$JMX_RMI_HOST |
-| JMX_RMI_HOST                     | 0.0.0.0   |               |                                                             |  |
-| JAVA_OPTS_\<variable\>=\<value\> | \<value\> | \<variable\>  |                                                              |  |
+| JMX_RMI_HOST                     | 0.0.0.0   |               |
+| JAVA_OPTS_\<variable\>=\<value\> | \<value\> | \<variable\>  |
 
 ## Quick reference
 **Supported Architectures:**

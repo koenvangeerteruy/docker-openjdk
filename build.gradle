@@ -14,7 +14,7 @@ static String getBranchName(Project project) {
     return project.hasProperty('branchName') ? project.branchName : (System.getenv('BRANCH_NAME') ?: 'local')
 }
 
-static String getVersionQualifier(String branchName) {
+static String getTagQualifier(String branchName) {
     if (branchName.endsWith('release')) {
         return ''
     }
@@ -64,14 +64,15 @@ static List<String> calcTags(Project project) {
     def allTags = extraTags + tags
 
     def branchName = getBranchName(project)
-    def versionQualifier = getVersionQualifier(branchName)
+    def tagQualifier = getTagQualifier(branchName)
     def buildTime = getBuildTime(branchName)
-    def timestampedTagsWithVersionQualifier = allTags.collect { it + "${versionQualifier}${buildTime}" }
+    def tagsWithTagQualifier = allTags.collect { it + "${tagQualifier}" }
+    def timestampedTagsWithTagQualifier = tagsWithTagQualifier.collect { it + "${buildTime}" }
 
-    if (!branchName.endsWith('release') && !branchName.equals('local')) {
-        return timestampedTagsWithVersionQualifier
+    if (!branchName.endsWith('release')) {
+        return tagsWithTagQualifier + timestampedTagsWithTagQualifier
     }
-    return allTags + timestampedTagsWithVersionQualifier
+    return allTags + timestampedTagsWithTagQualifier
 }
 
 ext {
