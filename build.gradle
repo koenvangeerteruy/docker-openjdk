@@ -14,6 +14,10 @@ static String getBranchName(Project project) {
     return project.hasProperty('branchName') ? project.branchName : (System.getenv('BRANCH_NAME') ?: 'local')
 }
 
+static String getBuildNumber(Project project) {
+    return project.hasProperty('buildNumber') ? project.buildNumber : (System.getenv('BUILD_NUMBER') ?: '0')
+}
+
 static String getTagQualifier(String branchName) {
     if (branchName.endsWith('release')) {
         return ''
@@ -26,13 +30,10 @@ static String getTagQualifier(String branchName) {
     return '-' + branchName.split('/').last() + '-SNAPSHOT'
 }
 
-static String getBuildTime(String branchName) {
-    def dateFormatPattern = "-yyyyMMdd"
-    if (!branchName.endsWith('release')) {
-        dateFormatPattern += ".HHmm"
-    }
+static String getBuildTime() {
+    def dateFormatPattern = '-yyyyMMdd'
     def df = new SimpleDateFormat(dateFormatPattern)
-    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    df.setTimeZone(TimeZone.getTimeZone('UTC'))
     return df.format(new Date())
 }
 
@@ -65,14 +66,17 @@ static List<String> calcTags(Project project) {
 
     def branchName = getBranchName(project)
     def tagQualifier = getTagQualifier(branchName)
-    def buildTime = getBuildTime(branchName)
+    def buildTime = getBuildTime()
+    def buildNumber = getBuildNumber(project)
     def tagsWithTagQualifier = allTags.collect { it + "${tagQualifier}" }
     def timestampedTagsWithTagQualifier = tagsWithTagQualifier.collect { it + "${buildTime}" }
+    def uniqueTimestampedTagsWithTagQualifier = timestampedTagsWithTagQualifier.collect { it + ".${buildNumber}" }
+    def allTimestampedTagsWithTagQualifier = timestampedTagsWithTagQualifier + uniqueTimestampedTagsWithTagQualifier
 
     if (!branchName.endsWith('release')) {
-        return tagsWithTagQualifier + timestampedTagsWithTagQualifier
+        return tagsWithTagQualifier + allTimestampedTagsWithTagQualifier
     }
-    return allTags + timestampedTagsWithTagQualifier
+    return allTags + allTimestampedTagsWithTagQualifier
 }
 
 ext {
