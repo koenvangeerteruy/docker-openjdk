@@ -14,11 +14,13 @@ jobs:
       - name: 'Build & Test'
         env:
           BRANCH_NAME: ${{ github.ref }}
-        run: ./gradlew check -PbranchName=$BRANCH_NAME --info
+          BUILD_NUMBER: ${{ github.run_id }}
+        run: ./gradlew check -PbranchName=$BRANCH_NAME -PbuildNumber=$BUILD_NUMBER --info
       - name: 'Publish docker image'
         if: ${{ startsWith(github.ref, 'refs/heads/release') || startsWith(github.ref, 'refs/heads/main') }}
         env:
           BRANCH_NAME: ${{ github.ref }}
+          BUILD_NUMBER: ${{ github.run_id }}
           DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-        run: ./gradlew pushDockerImage -PbranchName=$BRANCH_NAME --info
+        run: ./gradlew pushDockerImage -PbranchName=$BRANCH_NAME -PbuildNumber=$BUILD_NUMBER --info
