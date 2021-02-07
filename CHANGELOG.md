@@ -1,6 +1,9 @@
 # docker-openjdk - CHANGELOG
 All notable changes to this project will be documented in this file.
 
+## 2021-02
+* [2021-02-07] [I-#25](https://github.com/koenvangeerteruy/docker-openjdk/issues/25): Fix image age check script
+
 ## 2020-12
 * [2020-12-12] [I-#21](https://github.com/koenvangeerteruy/docker-openjdk/issues/21): Add unique timestamped image tags
 * [2020-12-07] [I-#16](https://github.com/koenvangeerteruy/docker-openjdk/issues/16): Provide also tags with only tag qualifier
