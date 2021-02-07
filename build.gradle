@@ -4,7 +4,6 @@ import com.avast.gradle.dockercompose.tasks.ComposeUp
 import com.bmuschko.gradle.docker.tasks.container.DockerWaitContainer
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.ZonedDateTime
 import java.util.concurrent.Callable
 
 plugins {
