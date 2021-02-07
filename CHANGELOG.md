@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 2021-02
+* [2021-02-07] [I-#24](https://github.com/koenvangeerteruy/docker-openjdk/issues/24): Update Java JDK 11 (LTS) to [jdk-11.0.10+9](https://www.azul.com/downloads/zulu-community/?version=java-11-lts&os=debian&architecture=x86-64-bit&package=jdk) ([jdk-update 2021-01-19](https://docs.azul.com/zulu/zulurelnotes/Zulu_ReleaseNotes.pdf))
 * [2021-02-07] [I-#25](https://github.com/koenvangeerteruy/docker-openjdk/issues/25): Fix image age check script
 
 ## 2020-12
