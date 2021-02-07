@@ -3,6 +3,8 @@ import com.avast.gradle.dockercompose.tasks.ComposeDown
 import com.avast.gradle.dockercompose.tasks.ComposeUp
 import com.bmuschko.gradle.docker.tasks.container.DockerWaitContainer
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZonedDateTime
 import java.util.concurrent.Callable
 
 plugins {
@@ -147,11 +149,12 @@ subprojects { Project project ->
     buildDockerImage {
         def osVariant = project.os.variant ? "-${project.os.variant}" : ""
         buildArgs = [
-                'BASE_IMAGE'   : "${project.os.vendor}:${project.os.version}${osVariant}",
+                'BASE_IMAGE'     : "${project.os.vendor}:${project.os.version}${osVariant}",
 
-                'ZULU_VERSION' : "${project.zulu.version.major}.${project.zulu.version.minor}.${project.zulu.version.update}",
-                'JAVA_FLAVOR'  : project.java.flavor,
-                'JAVA_VERSION' : "${project.java.version.major}.${project.java.version.minor}.${project.java.version.update}"
+                'ZULU_VERSION'   : "${project.zulu.version.major}.${project.zulu.version.minor}.${project.zulu.version.update}",
+                'JAVA_FLAVOR'    : project.java.flavor,
+                'JAVA_VERSION'   : "${project.java.version.major}.${project.java.version.minor}.${project.java.version.update}",
+                'BUILD_DATE_ARG' : (Instant.now().toEpochMilli() / 1000).toLong().toString()
         ]
 
         if (project.java.version.get('esum')) {
