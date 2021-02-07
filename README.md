@@ -1,15 +1,40 @@
-# docker-openjdk - Java Docker Images
+# Java Docker Images
 Java docker images using [Azul's Zulu OpenJDK](https://www.azul.com/downloads/zulu-community).
 
 ## Supported Tags
-* `jdk-11`, `jdk-11-debian`, `jdk-11-debian-10`, `jdk-11-buster`, `jdk-11u9.1-debian`, `jdk-11u9.1-debian-10`,  `jdk-11u9.1-buster`
-* `jdk-11-ubuntu`, `jdk-11-ubuntu-20.04`, `jdk-11-focal`, `jdk-11u9.1-ubuntu`, `jdk-11u9.1-ubuntu-20.04`,  `jdk-11u9.1-focal`
-
-Timestamped tags are also provided:
-* tags containing a `-SNAPSHOT` or `-SNAPSHOT-yyyymmdd.hhmm` postfix are development artifacts (from the main branch). Do not use them in a production environment.
-* tags containing a `-yyyymmdd` postfix are release artifacts
 
 **NOTE**: Timestamped tags are **NOT** maintained.
+
+#### Release
+* `jdk-11`, `jdk-11-debian`, `jdk-11-debian-10`, `jdk-11-buster`
+* `jdk-11-ubuntu`, `jdk-11-ubuntu-20.04`, `jdk-11-focal`
+* `jdk-11u10`, `jdk-11u10-debian`, `jdk-11u10-debian-10`, `jdk-11u10-buster`
+* `jdk-11u10-ubuntu`, `jdk-11u10-ubuntu-20.04`, `jdk-11u10-focal`
+* `jdk-11-yyyymmdd`, `jdk-11-debian-yyyymmdd`, `jdk-11-debian-10-yyyymmdd`, `jdk-11-buster-yyyymmdd`
+* `jdk-11-ubuntu-yyyymmdd`, `jdk-11-ubuntu-20.04-yyyymmdd`, `jdk-11-focal-yyyymmdd`
+* `jdk-11u10-yyyymmdd`, `jdk-11u10-debian-yyyymmdd`, `jdk-11u10-debian-10-yyyymmdd`, `jdk-11u10-buster-yyyymmdd`
+* `jdk-11u10-ubuntu-yyyymmdd`, `jdk-11u10-ubuntu-20.04-yyyymmdd`, `jdk-11u10-focal-yyyymmdd`
+* `jdk-11-yyyymmdd.buildNumber`, `jdk-11-debian-yyyymmdd.buildNumber`, `jdk-11-debian-10-yyyymmdd.buildNumber`, `jdk-11-buster-yyyymmdd.buildNumber`
+* `jdk-11-ubuntu-yyyymmdd.buildNumber`, `jdk-11-ubuntu-20.04-yyyymmdd.buildNumber`, `jdk-11-focal-yyyymmdd.buildNumber`
+* `jdk-11u10-yyyymmdd.buildNumber`, `jdk-11u10-debian-yyyymmdd.buildNumber`, `jdk-11u10-debian-10-yyyymmdd.buildNumber`, `jdk-11u10-buster-yyyymmdd.buildNumber`
+* `jdk-11u10-ubuntu-yyyymmdd.buildNumber`, `jdk-11u10-ubuntu-20.04-yyyymmdd.buildNumber`, `jdk-11u10-focal-yyyymmdd.buildNumber`
+
+#### Development
+
+**NOTE**: Do **NOT** use in a production environment. `-SNAPSHOT` tags indicate development artifacts from builds of the main branch.
+
+* `jdk-11-SNAPSHOT`, `jdk-11-debian-SNAPSHOT`, `jdk-11-debian-10-SNAPSHOT`, `jdk-11-buster-SNAPSHOT`
+* `jdk-11-ubuntu-SNAPSHOT`, `jdk-11-ubuntu-20.04-SNAPSHOT`, `jdk-11-focal-SNAPSHOT`
+* `jdk-11u10-SNAPSHOT`, `jdk-11u10-debian-SNAPSHOT`, `jdk-11u10-debian-10-SNAPSHOT`, `jdk-11u10-buster-SNAPSHOT`
+* `jdk-11u10-ubuntu-SNAPSHOT`, `jdk-11u10-ubuntu-20.04-SNAPSHOT`, `jdk-11u10-focal-SNAPSHOT`
+* `jdk-11-SNAPSHOT-yyyymmdd`, `jdk-11-debian-SNAPSHOT-yyyymmdd`, `jdk-11-debian-10-SNAPSHOT-yyyymmdd`, `jdk-11-buster-SNAPSHOT-yyyymmdd`
+* `jdk-11-ubuntu-SNAPSHOT-yyyymmdd`, `jdk-11-ubuntu-20.04-SNAPSHOT-yyyymmdd`, `jdk-11-focal-SNAPSHOT-yyyymmdd`
+* `jdk-11u10-SNAPSHOT-yyyymmdd`, `jdk-11u10-debian-SNAPSHOT-yyyymmdd`, `jdk-11u10-debian-10-SNAPSHOT-yyyymmdd`, `jdk-11u10-buster-SNAPSHOT-yyyymmdd`
+* `jdk-11u10-ubuntu-SNAPSHOT-yyyymmdd`, `jdk-11u10-ubuntu-20.04-SNAPSHOT-yyyymmdd`, `jdk-11u10-focal-SNAPSHOT-yyyymmdd`
+* `jdk-11-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11-debian-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11-debian-10-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11-buster-SNAPSHOT-yyyymmdd.buildNumber`
+* `jdk-11-ubuntu-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11-ubuntu-20.04-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11-focal-SNAPSHOT-yyyymmdd.buildNumber`
+* `jdk-11u10-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11u10-debian-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11u10-debian-10-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11u10-buster-SNAPSHOT-yyyymmdd.buildNumber`
+* `jdk-11u10-ubuntu-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11u10-ubuntu-20.04-SNAPSHOT-yyyymmdd.buildNumber`, `jdk-11u10-focal-SNAPSHOT-yyyymmdd.buildNumber`
 
 ## Environment variables
 There are several environment variables available to tweak the behaviour. While none of the variables are required, they may significantly aid you in using these images.
@@ -21,8 +46,8 @@ Environment variables:
 | -------------------------------- | --------- | ------------- |
 | JAVA_XMS                         |           | -Xmx          |
 | JAVA_XMX                         |           | -Xms          |
-| DEBUG                            | false     | -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n |
-| JMX_ENABLED                      | false     | -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.rmi.port=5000 -Dcom.sun.management.jmxremote.port=5000 -Djava.rmi.server.hostname=$JMX_RMI_HOST |
+| DEBUG                            | false     | -Xdebug <br> -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n |
+| JMX_ENABLED                      | false     | -Dcom.sun.management.jmxremote.authenticate=false <br> -Dcom.sun.management.jmxremote.local.only=false<br>-Dcom.sun.management.jmxremote.ssl=false <br> -Dcom.sun.management.jmxremote <br> -Dcom.sun.management.jmxremote.rmi.port=5000 <br> -Dcom.sun.management.jmxremote.port=5000 <br> -Djava.rmi.server.hostname=$JMX_RMI_HOST |
 | JMX_RMI_HOST                     | 0.0.0.0   |               |
 | JAVA_OPTS_\<variable\>=\<value\> | \<value\> | \<variable\>  |
 
@@ -47,21 +72,21 @@ openjdk:<type>-<version>-<os>
 There are permutations possible of three parameters in this project.
 
 * **Type**: the Java distribution type, one of `jdk`, `jre`.
-* **Version**: the Java version, for example `11u9.1`
-* **OS**: the Operating system, for example `debian-10`, with optionally some additional variants
+* **Version**: the Java version, for example `11` or `11u9.1`
+* **OS**: the Operating system, for example `debian` ,`debian-10` or `buster`
 
 Please file an issue if you need a different combination of parameters.
 
 ### Java versions
-In general, the latest update of the LTS-releases of the different distributions are maintained, based on the latest LTS release, of that distribution.
+In general, the latest update of the LTS-releases of different Java major versions, are maintained:
 
 * jdk-11
     - `jdk-11-debian`
     - `jdk-11-ubuntu`
 
 **NOTE**: the Java _update_ (=minor version) is **NOT** maintained.
-For example: the current Debian JDK 11 image is tagged with `jdk-11-debian-10` and has the additional tag `jdk-11u9.1-debian-10` to indicate the Java 11 _update_ version. 
-Once the next update is published, the image tagged `jdk-11-debian-10` will be updated, but `jdk-11u9.1-debian-10` will no longer be supported and will not receive OS or Java security patches.
+For example: the current Debian JDK 11 image is tagged with `jdk-11-debian-10` and has the additional tag `jdk-11u10-debian-10` to indicate the Java 11 _update_ version. 
+Once the next update gets published the image tagged `jdk-11-debian-10` will be updated, but `jdk-11u10-debian-10` will no longer be supported and will not receive OS or Java security patches.
 
 ### Operating Systems
 *  Debian 10 - `debian:buster`
