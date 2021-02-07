@@ -3,11 +3,12 @@ import com.avast.gradle.dockercompose.tasks.ComposeDown
 import com.avast.gradle.dockercompose.tasks.ComposeUp
 import com.bmuschko.gradle.docker.tasks.container.DockerWaitContainer
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.concurrent.Callable
 
 plugins {
-    id "eu.xenit.docker" version "5.1.1" apply false
-    id "eu.xenit.docker-compose" version "5.1.1" apply false
+    id "eu.xenit.docker" version "5.2.0" apply false
+    id "eu.xenit.docker-compose" version "5.2.0" apply false
 }
 
 static String getBranchName(Project project) {
@@ -81,10 +82,10 @@ static List<String> calcTags(Project project) {
 
 ext {
     ZULU = [
-            11: [major: 11, minor: 43, update: 55],
+            11: [major: 11, minor: 45, update: 27],
     ]
     ZULUOPENJDK = [
-            11: [major: 11, minor: 0, update: 9.1, esum: '6c79bfe8bb06c82b72ef2f293a14becef56b3078d298dc75fda4225cbb2d3d0c'],
+            11: [major: 11, minor: 0, update: 10, esum: '0bd85593bae021314378f3b146cfe36a6c9b0afd964d897c34201034ace3e785'],
     ]
 }
 
@@ -147,11 +148,12 @@ subprojects { Project project ->
     buildDockerImage {
         def osVariant = project.os.variant ? "-${project.os.variant}" : ""
         buildArgs = [
-                'BASE_IMAGE'   : "${project.os.vendor}:${project.os.version}${osVariant}",
+                'BASE_IMAGE'     : "${project.os.vendor}:${project.os.version}${osVariant}",
 
-                'ZULU_VERSION' : "${project.zulu.version.major}.${project.zulu.version.minor}.${project.zulu.version.update}",
-                'JAVA_FLAVOR'  : project.java.flavor,
-                'JAVA_VERSION' : "${project.java.version.major}.${project.java.version.minor}.${project.java.version.update}"
+                'ZULU_VERSION'   : "${project.zulu.version.major}.${project.zulu.version.minor}.${project.zulu.version.update}",
+                'JAVA_FLAVOR'    : project.java.flavor,
+                'JAVA_VERSION'   : "${project.java.version.major}.${project.java.version.minor}.${project.java.version.update}",
+                'BUILD_DATE_ARG' : (Instant.now().toEpochMilli() / 1000).toLong().toString()
         ]
 
         if (project.java.version.get('esum')) {
